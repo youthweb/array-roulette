@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta charset="UTF-8" />
+    <title>Array-Roulette</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="./node_modules/chance/dist/chance.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg text-center">
+                <img src="./img/yw-Schriftmarke-blau.svg" height="60" />
+                <p class="h3">Nenne ein Wort zur Kategorie</p>
+                <p class="category display-3 bg-primary text-white rounded">Stadt</p>
+                <p class="h3">beginnend mit dem Buchstaben</p>
+                <p class="letter display-3 bg-primary text-white rounded">A</p>
+                <button type="button" class="btn btn-success btn-lg hotbutton">Los</button>
+            </div>
+        </div>
+    </div>
+<script>
+var game = {
+    categories: [
+        'Stadt',
+        'Land',
+        'Fluss',
+        'Threadtitel im Forum',
+        'Username',
+        'Kücheninventar',
+        'Geburtstagsgeschenk',
+        'Dinge, die man täglich macht',
+        'Todesursache',
+        'Gründe für Schulverweis',
+        'Etwas, das sehr weh tut',
+    ]
+};
+(function (options) {
+    var is_running = false;
+    var i = 0;
+
+    var let_run = function() {
+        var tempStop = i + 500;
+        var category = document.querySelector('.category');
+        var letter = document.querySelector('.letter');
+        var chance = new Chance();
+
+        while (i < tempStop) {
+            category.innerHTML = chance.pickone(options.categories);
+            letter.innerHTML = chance.pickone(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']);
+            i++;
+        }
+
+        if (is_running && i < 100000) {
+            window.setTimeout(let_run, 0);
+        } else {
+            let_stop();
+        }
+    };
+
+    var let_stop = function() {
+        is_running = false;
+        var hotbutton = document.querySelector('.hotbutton');
+        hotbutton.innerHTML = 'Los!';
+        hotbutton.classList.replace('btn-danger', 'btn-success');
+        console.log(i);
+    };
+
+    var toggle_start = function() {
+        if (is_running === false) {
+            is_running = true;
+            i = 0;
+            hotbutton.innerHTML = 'Stop!';
+            hotbutton.classList.replace('btn-success', 'btn-danger');
+            window.setTimeout(let_run, 0);
+        }
+        else {
+            let_stop();
+        }
+    };
+
+    var hotbutton = document.querySelector('.hotbutton');
+
+    // Hotbutton handler
+    hotbutton.onclick = toggle_start;
+    // Spacebar handler
+    document.body.onkeyup = function(e) {
+        if(e.keyCode == 32){
+            toggle_start();
+        }
+    }
+})(game);
+</script>
+</body>
+</html>
