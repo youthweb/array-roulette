@@ -1,0 +1,14 @@
+{
+  "name": "array-roulette",
+  "version": "1.0.0",
+  "description": "Game to choose a random entry from an array",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Artur Weigandt",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "chance": "^1.0.12"
+  }
+}
