@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-lg text-center">
                 <img src="./img/yw-Schriftmarke-blau.svg" height="60" />
-                <p class="h2">Nenne ein Wort zur Kategorie</p>
+                <p class="h2">Nenne etwas zur Kategorie</p>
                 <p class="category display-3 bg-primary text-white rounded">Stadt</p>
                 <p class="h2">beginnend mit dem Buchstaben</p>
                 <p class="letter display-3 bg-primary text-white rounded">A</p>
@@ -31,7 +31,7 @@ var game = {
         'Geburtstagsgeschenk',
         'Dinge, die man täglich macht',
         'Todesursache',
-        'Gründe für Schulverweis',
+        'Grund für einen Schulverweis',
         'Etwas, das sehr weh tut',
         'Grund, warum ich zu spät bin',
         'Was Youthweb braucht',
@@ -73,10 +73,21 @@ var game = {
         'Y',
         'Z',
     ],
+    selectors: {
+        category: '.category',
+        letter: '.letter',
+        hotbutton: '.hotbutton',
+    },
+    runtime_max: 1000000,
+    runtime_temp: 1000,
+    runtime_wait: 10, //miliseconds
 };
 (function (options) {
     var is_running = false;
     var i = 0;
+    var hotbutton = document.querySelector(options.selectors.hotbutton);
+    var category = document.querySelector(options.selectors.category);
+    var letter = document.querySelector(options.selectors.letter);
 
     var random_integer = function(int_min, int_max) {
         return Math.floor(Math.random() * (int_max - int_min + 1) + int_min);
@@ -87,9 +98,8 @@ var game = {
     };
 
     var let_run = function() {
-        var tempStop = i + 500;
-        var category = document.querySelector('.category');
-        var letter = document.querySelector('.letter');
+        var tempStop = i + options.runtime_temp;
+
         while (i < tempStop) {
             i++;
         }
@@ -97,8 +107,8 @@ var game = {
         category.innerHTML = random_entry(options.categories);
         letter.innerHTML = random_entry(options.letters);
 
-        if (is_running && i < 1000000) {
-            window.setTimeout(let_run, 0);
+        if (is_running && i < options.runtime_max) {
+            window.setTimeout(let_run, options.runtime_wait);
         } else {
             let_stop();
         }
@@ -106,10 +116,8 @@ var game = {
 
     var let_stop = function() {
         is_running = false;
-        var hotbutton = document.querySelector('.hotbutton');
         hotbutton.innerHTML = 'Los!';
         hotbutton.classList.replace('btn-danger', 'btn-success');
-        console.log(i);
     };
 
     var toggle_start = function() {
@@ -119,19 +127,17 @@ var game = {
             hotbutton.innerHTML = 'Stop!';
             hotbutton.classList.replace('btn-success', 'btn-danger');
             window.setTimeout(let_run, 0);
-        }
-        else {
+        } else {
             let_stop();
         }
     };
 
-    var hotbutton = document.querySelector('.hotbutton');
-
     // Hotbutton handler
     hotbutton.onclick = toggle_start;
+
     // Spacebar handler
     document.body.onkeyup = function(e) {
-        if(e.keyCode == 32){
+        if(e.keyCode == 32) {
             toggle_start();
         }
     }
