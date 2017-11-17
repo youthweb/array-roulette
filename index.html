@@ -78,13 +78,14 @@ var game = {
         letter: '.letter',
         hotbutton: '.hotbutton',
     },
-    runtime_max: 1000000,
-    runtime_temp: 1000,
-    runtime_wait: 10, //miliseconds
+    runtime_max_seconds: 10, // seconds
+    runtime_wait_miliseconds: 20, // miliseconds
 };
+
 (function (options) {
     var is_running = false;
-    var i = 0;
+    var rounds_counter = 0;
+    var rounds_max = options.runtime_max_seconds * 1000 / options.runtime_wait_miliseconds;
     var hotbutton = document.querySelector(options.selectors.hotbutton);
     var category = document.querySelector(options.selectors.category);
     var letter = document.querySelector(options.selectors.letter);
@@ -98,32 +99,34 @@ var game = {
     };
 
     var let_run = function() {
-        var tempStop = i + options.runtime_temp;
-
-        while (i < tempStop) {
-            i++;
-        }
+        rounds_counter++;
 
         category.innerHTML = random_entry(options.categories);
         letter.innerHTML = random_entry(options.letters);
 
-        if (is_running && i < options.runtime_max) {
-            window.setTimeout(let_run, options.runtime_wait);
-        } else {
+        if (is_running && rounds_counter < rounds_max) {
+            window.setTimeout(let_run, options.runtime_wait_miliseconds);
+        } else if (is_running) {
             let_stop();
         }
     };
 
     var let_stop = function() {
         is_running = false;
+        rounds_counter = 0;
         hotbutton.innerHTML = 'Los!';
         hotbutton.classList.replace('btn-danger', 'btn-success');
+
+        // Disable button for some miliseconds
+        hotbutton.setAttribute('disabled', 'disabled');
+        window.setTimeout(function() {
+            hotbutton.removeAttribute('disabled');
+        }, 250);
     };
 
     var toggle_start = function() {
         if (is_running === false) {
             is_running = true;
-            i = 0;
             hotbutton.innerHTML = 'Stop!';
             hotbutton.classList.replace('btn-success', 'btn-danger');
             window.setTimeout(let_run, 0);
