@@ -5,7 +5,6 @@
     <meta charset="UTF-8" />
     <title>Array-Roulette</title>
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script src="./node_modules/chance/dist/chance.min.js"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -44,25 +43,61 @@ var game = {
         'Was ich nicht im Kühlschrank erwarte',
         'Etwas zu essen',
         'Kleidungsstück',
-    ]
+    ],
+    letters: [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'W',
+        'X',
+        'Y',
+        'Z',
+    ],
 };
 (function (options) {
     var is_running = false;
     var i = 0;
 
+    var random_integer = function(int_min, int_max) {
+        return Math.floor(Math.random() * (int_max - int_min + 1) + int_min);
+    };
+
+    var random_entry = function(arr) {
+        return arr[random_integer(0, arr.length - 1)];
+    };
+
     var let_run = function() {
         var tempStop = i + 500;
         var category = document.querySelector('.category');
         var letter = document.querySelector('.letter');
-        var chance = new Chance();
-
         while (i < tempStop) {
-            category.innerHTML = chance.pickone(options.categories);
-            letter.innerHTML = chance.pickone(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']);
             i++;
         }
 
-        if (is_running && i < 100000) {
+        category.innerHTML = random_entry(options.categories);
+        letter.innerHTML = random_entry(options.letters);
+
+        if (is_running && i < 1000000) {
             window.setTimeout(let_run, 0);
         } else {
             let_stop();

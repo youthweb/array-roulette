@@ -9,7 +9,6 @@
   "author": "Artur Weigandt",
   "license": "GPL-3.0",
   "dependencies": {
-    "bootstrap": "^4.0.0-beta.2",
-    "chance": "^1.0.12"
+    "bootstrap": "^4.0.0-beta.2"
   }
 }
