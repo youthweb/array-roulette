@@ -9,6 +9,7 @@
   "author": "Artur Weigandt",
   "license": "GPL-3.0",
   "dependencies": {
-    "bootstrap": "^4.0.0-beta.2"
+    "bootstrap": "^4.0.0-beta.2",
+    "font-awesome": "^4.7.0"
   }
 }
