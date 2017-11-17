@@ -80,10 +80,12 @@ var game = {
     },
     runtime_max_seconds: 10, // seconds
     runtime_wait_miliseconds: 20, // miliseconds
+    cooling_down_miliseconds: 500, // miliseconds
 };
 
 (function (options) {
     var is_running = false;
+    var is_cooling_down = false;
     var rounds_counter = 0;
     var rounds_max = options.runtime_max_seconds * 1000 / options.runtime_wait_miliseconds;
     var hotbutton = document.querySelector(options.selectors.hotbutton);
@@ -113,6 +115,7 @@ var game = {
 
     var let_stop = function() {
         is_running = false;
+        is_cooling_down = true;
         rounds_counter = 0;
         hotbutton.innerHTML = 'Los!';
         hotbutton.classList.replace('btn-danger', 'btn-success');
@@ -121,10 +124,15 @@ var game = {
         hotbutton.setAttribute('disabled', 'disabled');
         window.setTimeout(function() {
             hotbutton.removeAttribute('disabled');
-        }, 250);
+            is_cooling_down = false;
+        }, options.cooling_down_miliseconds);
     };
 
     var toggle_start = function() {
+        if (is_cooling_down) {
+            // Do nothing on cooling down
+            return;
+        }
         if (is_running === false) {
             is_running = true;
             hotbutton.innerHTML = 'Stop!';
